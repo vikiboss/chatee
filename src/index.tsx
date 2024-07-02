@@ -8,7 +8,7 @@ import { Chatee } from "./chatee.js";
 const cli = meow(
 	`
 	Usage
-	  $ chatee
+		$ chatee
 
 	Options
 		--reset  Reset all data

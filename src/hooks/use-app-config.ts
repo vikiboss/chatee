@@ -1,5 +1,5 @@
-import { configStore } from "../app-config.js";
+import { store } from "../store.js";
 
 export function useAppConfig() {
-	return [configStore.useSnapshot(), configStore.mutate] as const;
+	return [store.useSnapshot((s) => s.config), store.mutate] as const;
 }

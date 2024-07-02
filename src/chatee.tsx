@@ -1,33 +1,37 @@
-import { Newline, Text } from "ink";
-import { useMount } from "@shined/react-use";
-
-import "./app-config.js";
-
-import { useShortcuts } from "./hooks/use-shortcuts.js";
-import { useAppConfig } from "./hooks/use-app-config.js";
-
+import { Box, Newline, Text } from "ink";
 import { usePage } from "./hooks/use-page.js";
+import { useShortcuts } from "./hooks/use-shortcuts.js";
+import { useLifecycle } from "./hooks/use-lifecycle.js";
 
 interface ChateeProps {
 	reset?: boolean;
 }
 
 export function Chatee(props: ChateeProps) {
-	const { reset } = props;
-	const [_, mutate] = useAppConfig();
-	const page = usePage();
+	const [page] = usePage();
 
-	useMount(() => {
-		if (reset) mutate.config = {};
-	});
-
+	useLifecycle(props.reset);
 	useShortcuts();
 
 	return (
-		<Text>
-			Hello, <Text color="green">{new Date().toLocaleString()}</Text>
-			<Newline />
-			{page}
-		</Text>
+		<Box
+			width="full"
+			borderStyle={{
+				topLeft: "↘",
+				top: "↓",
+				topRight: "↙",
+				left: "→",
+				bottomLeft: "↗",
+				bottom: "↑",
+				bottomRight: "↖",
+				right: "←",
+			}}
+			borderColor="greenBright"
+		>
+			<Text>
+				<Newline />
+				{page}
+			</Text>
+		</Box>
 	);
 }
