@@ -31,7 +31,7 @@ export function Home() {
 	})) as { label: SelectValue; value: SelectValue }[];
 
 	return (
-		<Box display="flex" flexDirection="column">
+		<Box flexGrow={1} display="flex" flexDirection="column">
 			<Text color="cyan">Chatee! </Text>
 			{isOnline && (
 				<Box>

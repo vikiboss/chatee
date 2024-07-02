@@ -26,7 +26,7 @@ export function Chat() {
 	const hasTarget = active.type && active.id;
 
 	return (
-		<Box display="flex" flexDirection="column">
+		<Box flexGrow={1} display="flex" flexDirection="column">
 			{!active.type && (
 				<SelectInput
 					items={
@@ -60,7 +60,7 @@ export function Chat() {
 				histories.map((e) => (
 					<Box key={e.timestamp}>
 						<Text dimColor color="cyan">
-							{active.id}
+							{e.name}
 						</Text>
 						<Text dimColor>: {e.content}</Text>
 					</Box>
@@ -78,7 +78,7 @@ export function Chat() {
 							await g?.sendMsg(raw);
 
 							store.mutate.history.groups[active.id] ??= [];
-							store.mutate.history.groups[active.id].unshift({
+							store.mutate.history.groups[active.id].push({
 								name: client?.nickname ?? "unknown",
 								timestamp: Date.now().toString(),
 								content: raw,
@@ -89,7 +89,7 @@ export function Chat() {
 							await f?.sendMsg(raw);
 
 							store.mutate.history.friends[active.id] ??= [];
-							store.mutate.history.friends[active.id].unshift({
+							store.mutate.history.friends[active.id].push({
 								name: client?.nickname ?? "unknown",
 								timestamp: Date.now().toString(),
 								content: raw,
