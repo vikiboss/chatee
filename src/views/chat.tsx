@@ -69,38 +69,41 @@ export function Chat() {
 			{hasTarget && !histories.length && <Text dimColor>No message</Text>}
 
 			{hasTarget && (
-				<TextInput
-					onSubmit={async () => {
-						if (!active.id || !raw) return;
+				<Box>
+					<Text dimColor>👉 </Text>
+					<TextInput
+						onSubmit={async () => {
+							if (!active.id || !raw) return;
 
-						if (isGroup && active.id) {
-							const g = client?.pickGroup(active.id);
-							await g?.sendMsg(raw);
+							if (isGroup && active.id) {
+								const g = client?.pickGroup(active.id);
+								await g?.sendMsg(raw);
 
-							store.mutate.history.groups[active.id] ??= [];
-							store.mutate.history.groups[active.id].push({
-								name: client?.nickname ?? "unknown",
-								timestamp: Date.now().toString(),
-								content: raw,
-								groupName: client?.pickGroup(active.id).name ?? "unknown",
-							});
-						} else {
-							const f = client?.pickFriend(active.id);
-							await f?.sendMsg(raw);
+								store.mutate.history.groups[active.id] ??= [];
+								store.mutate.history.groups[active.id].push({
+									name: client?.nickname ?? "unknown",
+									timestamp: Date.now().toString(),
+									content: raw,
+									groupName: client?.pickGroup(active.id).name ?? "unknown",
+								});
+							} else {
+								const f = client?.pickFriend(active.id);
+								await f?.sendMsg(raw);
 
-							store.mutate.history.friends[active.id] ??= [];
-							store.mutate.history.friends[active.id].push({
-								name: client?.nickname ?? "unknown",
-								timestamp: Date.now().toString(),
-								content: raw,
-							});
-						}
+								store.mutate.history.friends[active.id] ??= [];
+								store.mutate.history.friends[active.id].push({
+									name: client?.nickname ?? "unknown",
+									timestamp: Date.now().toString(),
+									content: raw,
+								});
+							}
 
-						setRaw("");
-					}}
-					value={raw}
-					onChange={setRaw}
-				/>
+							setRaw("");
+						}}
+						value={raw}
+						onChange={setRaw}
+					/>
+				</Box>
 			)}
 		</Box>
 	);
