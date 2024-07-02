@@ -6,9 +6,9 @@ import { subscribe } from "@shined/reactive/vanilla";
 
 export namespace App {
 	export type Page =
+		| "list"
 		| "home"
 		| "about"
-		| "login"
 		| "chat"
 		| "settings"
 		| "loading";
@@ -17,7 +17,7 @@ export namespace App {
 export interface AppConfig {
 	account?: number;
 	password?: string;
-	platform?: string;
+	platform?: number;
 }
 
 export const chateeDir = path.join(os.homedir(), ".config/chatee");
@@ -30,7 +30,7 @@ export const store = create({
 });
 
 subscribe(store.mutate, (changes) => {
-	if (changes.propsPath[0] === "config") {
+	if (changes.props[0] === "config") {
 		fs.writeFileSync(
 			chateeConfig,
 			JSON.stringify(store.mutate.config, null, 2),
