@@ -33,12 +33,36 @@ export function login() {
 
 	client.on("system.online", async () => {
 		store.mutate.isOnline = true;
+		store.mutate.page = "home";
 		store.mutate.groupList = [...(client?.getGroupList().values() ?? [])];
 		store.mutate.friendList = [...(client?.getFriendList().values() ?? [])];
 	});
 
 	client.on("system.offline", () => {
 		store.mutate.isOnline = false;
+	});
+
+	client.on("message.private.friend", (event) => {
+		store.mutate.history.friends[event.sender.user_id] = [
+			...(store.mutate.history.friends[event.sender.user_id] ?? []),
+			{
+				name: event.sender.nickname,
+				content: event.raw_message,
+				timestamp: Date.now().toString(),
+			},
+		];
+	});
+
+	client.on("message.group.normal", (event) => {
+		store.mutate.history.groups[event.group_id] = [
+			...(store.mutate.history.groups[event.group_id] ?? []),
+			{
+				name: event.sender.nickname,
+				groupName: event.group_name,
+				content: event.raw_message,
+				timestamp: Date.now().toString(),
+			},
+		];
 	});
 
 	client.login(store.mutate.config.account);

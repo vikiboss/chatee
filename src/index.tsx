@@ -5,6 +5,9 @@ import meow from "meow";
 
 import { Chatee } from "./chatee.js";
 
+process.on("uncaughtException", console.warn);
+process.on("unhandledRejection", console.warn);
+
 const cli = meow(
 	`
 	Usage

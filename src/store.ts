@@ -33,12 +33,33 @@ export const store = create({
 	isOnline: false,
 
 	active: {
-		type: "none" as "friend" | "group" | "none",
-		id: 0,
+		name: undefined as string | undefined,
+		id: undefined as undefined | number,
+		type: undefined as "friend" | "group" | undefined,
 	},
 
 	friendList: [] as FriendInfo[],
 	groupList: [] as GroupInfo[],
+
+	history: {
+		friends: {} as Record<
+			number,
+			{
+				name: string;
+				timestamp: string;
+				content: string;
+			}[]
+		>,
+		groups: {} as Record<
+			number,
+			{
+				name: string;
+				groupName: string;
+				timestamp: string;
+				content: string;
+			}[]
+		>,
+	},
 });
 
 subscribe(store.mutate, (changes) => {

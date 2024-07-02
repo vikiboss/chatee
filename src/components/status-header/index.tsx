@@ -1,12 +1,12 @@
 import { Box, Text, Spacer } from "ink";
 import { useAppConfig } from "../../hooks/use-app-config";
-import { useNow } from "@shined/react-use";
 import { useIsOnline } from "../../hooks/use-is-online";
+import { store } from "../../store";
 
 export function StatusHeader() {
 	const isOnline = useIsOnline();
 	const [config] = useAppConfig();
-	const now = useNow({ interval: 300 });
+	const active = store.useSnapshot((s) => s.active);
 
 	return (
 		<Box width="100%">
@@ -14,12 +14,14 @@ export function StatusHeader() {
 				UID: {config.account ?? "No Account"}
 			</Text>
 			<Spacer />
-			<Text dimColor color={isOnline ? "green" : "red"}>
-				{isOnline ? "online" : "offline"}
-			</Text>
+			{active.id && (
+				<Text dimColor color="cyan">
+					{active.name} ({active.id} - {active.type})
+				</Text>
+			)}
 			<Spacer />
-			<Text dimColor color="yellow">
-				{now.toLocaleString()}
+			<Text dimColor color={isOnline ? "green" : "red"}>
+				{isOnline ? "Online" : "Offline"}
 			</Text>
 		</Box>
 	);
