@@ -1,10 +1,10 @@
 import fs from "node:fs";
 import os from "node:os";
+import path from "node:path";
 import { create } from "@shined/reactive";
 import { subscribe } from "@shined/reactive/vanilla";
 
 import type { Store } from "@shined/reactive";
-import path from "node:path";
 
 export interface AppConfig {
 	account?: number;
@@ -26,12 +26,15 @@ function readInitialConfig() {
 	return {};
 }
 
-export const store: Store<{ config: AppConfig }> = create({
+export const configStore: Store<{ config: AppConfig }> = create({
 	config: readInitialConfig(),
 });
 
-subscribe(store.mutate, (changes) => {
+subscribe(configStore.mutate, (changes) => {
 	if (changes.propsPath.includes("config")) {
-		fs.writeFileSync(configFile, JSON.stringify(store.mutate.config, null, 2));
+		fs.writeFileSync(
+			configFile,
+			JSON.stringify(configStore.mutate.config, null, 2),
+		);
 	}
 });

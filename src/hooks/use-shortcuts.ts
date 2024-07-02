@@ -1,5 +1,6 @@
 import { useUnmount } from "@shined/react-use";
 import { useApp, useInput } from "ink";
+import { store } from "../store.js";
 
 export function useShortcuts() {
 	const app = useApp();
@@ -11,6 +12,10 @@ export function useShortcuts() {
 	useInput((key) => {
 		if (key === "q") {
 			app.exit();
+		}
+
+		if (key === "a") {
+			store.mutate.page = "about";
 		}
 	});
 }
