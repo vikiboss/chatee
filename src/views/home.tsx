@@ -1,6 +1,7 @@
 import { Box, Text, useApp } from "ink";
 import SelectInput from "ink-select-input";
 import { usePage } from "../hooks/use-page";
+import { login } from "../client";
 
 import type { App } from "../store";
 
@@ -14,7 +15,7 @@ export function Home() {
 		if (item.value === "exit") {
 			app.exit();
 		} else if (item.value === "login") {
-			// login oicq
+			login();
 		} else {
 			setPage(item.value);
 		}

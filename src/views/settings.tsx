@@ -8,7 +8,7 @@ import SelectInput from "ink-select-input";
 export function Settings() {
 	const [field, actions] = useCircularList([
 		"user",
-		"pwd",
+		// "pwd",
 		"protocol",
 		"summary",
 	] as const);
@@ -25,28 +25,30 @@ export function Settings() {
 						value={(config.account ?? "").toString()}
 						onSubmit={() => actions.next()}
 						onChange={(value) => {
-							if (!Number.isNaN(+value)) {
-								mutate.config.account = +value;
+							if (+value === 0) {
+								mutate.account = undefined;
+							} else if (!Number.isNaN(+value)) {
+								mutate.account = +value;
 							}
 						}}
 					/>
 				</Box>
 			)}
-			{field === "pwd" && (
+			{/* {field === "pwd" && (
 				<Box>
 					<Text>Password: </Text>
 					<TextInput
 						value={pass}
 						onSubmit={() => {
 							if (pass) {
-								mutate.config.password = md5(pass);
+								mutate.password = md5(pass);
 							}
 							actions.next();
 						}}
 						onChange={setPass}
 					/>
 				</Box>
-			)}
+			)} */}
 			{field === "protocol" && (
 				<Box>
 					<Text>Platform: </Text>
@@ -61,7 +63,7 @@ export function Settings() {
 							{ label: "Tim", value: 6 },
 						]}
 						onSelect={(item) => {
-							mutate.config.platform = item.value;
+							mutate.platform = item.value;
 							actions.next();
 						}}
 					/>

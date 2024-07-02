@@ -4,9 +4,12 @@ import path from "node:path";
 import { create } from "@shined/reactive";
 import { subscribe } from "@shined/reactive/vanilla";
 
+import type { FriendInfo, GroupInfo } from "@icqqjs/icqq";
+
 export namespace App {
 	export type Page =
 		| "list"
+		| "qrcode"
 		| "home"
 		| "about"
 		| "chat"
@@ -27,6 +30,15 @@ export const chateeConfig = path.join(chateeDir, "chatee.json");
 export const store = create({
 	config: readInitialConfig() as AppConfig,
 	page: "home" as App.Page,
+	isOnline: false,
+
+	active: {
+		type: "none" as "friend" | "group" | "none",
+		id: 0,
+	},
+
+	friendList: [] as FriendInfo[],
+	groupList: [] as GroupInfo[],
 });
 
 subscribe(store.mutate, (changes) => {

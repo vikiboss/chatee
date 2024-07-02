@@ -7,10 +7,12 @@ import { About } from "../views/about.js";
 import { store, type App } from "../store.js";
 import { useLoading } from "./use-loading.js";
 import { List } from "../views/list.js";
+import { QRcode } from "../views/qrcode.js";
 
 const map: Record<App.Page, React.ReactNode> = {
 	about: <About />,
 	chat: <Chat />,
+	qrcode: <QRcode />,
 	list: <List />,
 	home: <Home />,
 	settings: <Settings />,

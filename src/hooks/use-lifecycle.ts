@@ -8,12 +8,18 @@ export function useLifecycle(reset = false) {
 
 	useMount(() => {
 		if (reset) {
-			mutate.config = {};
+			Object.assign(mutate, {
+				account: undefined,
+				password: undefined,
+				platform: undefined,
+			});
+
 			fs.rmdirSync(chateeDataDir, { recursive: true });
 		}
 	});
 
 	useUnmount(() => {
 		console.log(`\nBye, see you later! (${new Date().toLocaleString()})`);
+		process.exit();
 	});
 }
