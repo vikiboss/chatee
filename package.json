@@ -1,0 +1,27 @@
+{
+	"name": "terminal-chat",
+	"version": "0.0.0-alpha.0",
+	"description": "a simple terminal chat app",
+	"packageManager": "pnpm@9.4.0",
+	"main": "index.js",
+	"bin": "./dist/index.js",
+	"scripts": {
+		"dev": "pnpm run build --watch",
+		"build": "tsup --entry ./src/index.ts --format=esm"
+	},
+	"engines": {
+		"node": ">=18"
+	},
+	"keywords": [],
+	"author": "Viki <hi@viki.moe> (https://github.com/vikiboss)",
+	"license": "MIT",
+	"dependencies": {
+		"ink": "^5.0.1",
+		"react": "^18.3.1"
+	},
+	"devDependencies": {
+		"@types/node": "^20.14.9",
+		"tsup": "^8.1.0",
+		"typescript": "^5.5.3"
+	}
+}
