@@ -75,7 +75,7 @@ export function login() {
 			...(store.mutate.history.friends[event.sender.user_id] ?? []),
 			{
 				name: event.sender.nickname,
-				content: event.message.toString(),
+				content: event.toString(),
 				timestamp: Date.now().toString(),
 			},
 		];
