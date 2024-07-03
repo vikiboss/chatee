@@ -17,8 +17,7 @@ export function Chatee(props: ChateeProps) {
 	return (
 		<Box height="100%" width="100%" display="flex" flexDirection="column">
 			<StatusHeader />
-
-			<Box flexGrow={1} width="100%" height="100%" minHeight={8}>
+			<Box flexGrow={1} minHeight={10}>
 				{page}
 			</Box>
 		</Box>

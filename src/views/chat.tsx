@@ -1,4 +1,4 @@
-import { useSafeState, useUnmount } from "@shined/react-use";
+import { useControlledComponent, useUnmount } from "@shined/react-use";
 import { Box, Text } from "ink";
 import TextInput from "ink-text-input";
 import SelectInput from "ink-select-input";
@@ -6,8 +6,8 @@ import { store } from "../store";
 import { client } from "../client";
 
 export function Chat() {
-	const [id, setId] = useSafeState("");
-	const [raw, setRaw] = useSafeState("");
+	const id = useControlledComponent("");
+	const raw = useControlledComponent("");
 	const active = store.useSnapshot((s) => s.active);
 	const history = store.useSnapshot((s) => s.history);
 
@@ -28,80 +28,93 @@ export function Chat() {
 	return (
 		<Box flexGrow={1} display="flex" flexDirection="column">
 			{!active.type && (
-				<SelectInput
-					items={
-						[
-							{ label: "Friend", value: "friend" },
-							{ label: "Group", value: "group" },
-						] as const
-					}
-					onSelect={(item) => {
-						store.mutate.active.type = item.value;
-					}}
-				/>
+				<Box>
+					<Text>Select 👉 </Text>
+					<SelectInput
+						onSelect={(item) => {
+							store.mutate.active.type = item.value;
+						}}
+						items={
+							[
+								{ label: "with Friend", value: "friend" },
+								{ label: "in Group", value: "group" },
+							] as const
+						}
+					/>
+				</Box>
 			)}
 
 			{active.type && !active.id && (
-				<TextInput
-					value={id}
-					onSubmit={() => {
-						if (!Number.isNaN(+id) && +id) {
-							store.mutate.active.id = +id;
-							store.mutate.active.name = isGroup
-								? client?.pickGroup(+id).name
-								: client?.pickFriend(+id).nickname;
-						}
-					}}
-					onChange={setId}
-				/>
+				<Box>
+					<Text>Target Id 👉 </Text>
+					<TextInput
+						{...id.props}
+						onSubmit={() => {
+							if (!Number.isNaN(+id.value) && +id.value) {
+								store.mutate.active.id = +id.value;
+
+								store.mutate.active.name = isGroup
+									? client?.pickGroup(+id.value).name
+									: client?.pickFriend(+id.value).nickname;
+							}
+						}}
+					/>
+				</Box>
 			)}
 
-			{hasTarget &&
-				histories.map((e) => (
-					<Box key={e.timestamp}>
-						<Text dimColor color="cyan">
-							{e.name}
-						</Text>
-						<Text dimColor>: {e.content}</Text>
-					</Box>
-				))}
+			<Box display="flex" flexDirection="column" marginY={1}>
+				{hasTarget &&
+					histories.slice(-60).map((e) => (
+						<Box key={e.timestamp + e.name + e.content}>
+							<Text dimColor color={e.name === active.name ? "blue" : "gray"}>
+								{e.name}
+							</Text>
+							<Box marginLeft={1}>
+								<Text dimColor>{e.content}</Text>
+							</Box>
+						</Box>
+					))}
 
-			{hasTarget && !histories.length && <Text dimColor>No message</Text>}
+				{hasTarget && !histories.length && <Text dimColor>No message</Text>}
+			</Box>
 
 			{hasTarget && (
 				<Box>
-					<Text dimColor>👉 </Text>
+					<Box marginRight={1}>
+						<Text dimColor>&rarr;</Text>
+					</Box>
 					<TextInput
+						{...raw.props}
 						onSubmit={async () => {
-							if (!active.id || !raw) return;
+							if (!active.id || !raw.value) return;
 
-							if (isGroup && active.id) {
+							raw.setValue(`${raw.value} (sending...)`);
+
+							if (isGroup) {
 								const g = client?.pickGroup(active.id);
-								await g?.sendMsg(raw);
+								await g?.sendMsg(raw.value);
 
 								store.mutate.history.groups[active.id] ??= [];
 								store.mutate.history.groups[active.id].push({
 									name: client?.nickname ?? "unknown",
 									timestamp: Date.now().toString(),
-									content: raw,
+									content: raw.value,
 									groupName: client?.pickGroup(active.id).name ?? "unknown",
 								});
 							} else {
 								const f = client?.pickFriend(active.id);
-								await f?.sendMsg(raw);
+								await f?.sendMsg(raw.value);
 
 								store.mutate.history.friends[active.id] ??= [];
 								store.mutate.history.friends[active.id].push({
 									name: client?.nickname ?? "unknown",
 									timestamp: Date.now().toString(),
-									content: raw,
+									content: raw.value,
 								});
 							}
 
-							setRaw("");
+							raw.reset();
 						}}
-						value={raw}
-						onChange={setRaw}
 					/>
 				</Box>
 			)}

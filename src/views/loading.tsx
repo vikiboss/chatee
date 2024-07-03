@@ -1,5 +1,9 @@
-import { Text } from "ink";
+import { Box, Text } from "ink";
 
 export function Loading() {
-	return <Text>Loading...</Text>;
+	return (
+		<Box height="100%" marginY={2} marginX={4}>
+			<Text color="green">Loading...</Text>
+		</Box>
+	);
 }

@@ -47,7 +47,7 @@ export function login() {
 			...(store.mutate.history.friends[event.sender.user_id] ?? []),
 			{
 				name: event.sender.nickname,
-				content: event.raw_message,
+				content: event.message.toString(),
 				timestamp: Date.now().toString(),
 			},
 		];
@@ -59,7 +59,7 @@ export function login() {
 			{
 				name: event.sender.nickname,
 				groupName: event.group_name,
-				content: event.raw_message,
+				content: event.toString(),
 				timestamp: Date.now().toString(),
 			},
 		];

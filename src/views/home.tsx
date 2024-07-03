@@ -32,12 +32,18 @@ export function Home() {
 
 	return (
 		<Box flexGrow={1} display="flex" flexDirection="column">
-			<Text color="cyan">Chatee! </Text>
-			{isOnline && (
-				<Box>
-					<Text color="green">Welcome, {client?.nickname ?? "unknown"}!</Text>
-				</Box>
-			)}
+			<Box marginY={1}>
+				{isOnline ? (
+					<Text dimColor color="green">
+						Welcome to Chatee, {client?.nickname ?? "unknown"}!
+					</Text>
+				) : (
+					<Text dimColor color="yellow">
+						Please login first.
+					</Text>
+				)}
+			</Box>
+
 			<SelectInput items={pages} onSelect={handleSelect} />
 		</Box>
 	);

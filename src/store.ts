@@ -34,7 +34,7 @@ export const store = create({
 
 	active: {
 		name: undefined as string | undefined,
-		id: undefined as undefined | number,
+		id: undefined as number | undefined,
 		type: undefined as "friend" | "group" | undefined,
 	},
 
