@@ -9,7 +9,7 @@ export function StatusHeader() {
 
 	return (
 		<Box width="100%">
-			<Box width={32} display="flex" justifyContent="flex-start">
+			<Box width={48} display="flex" justifyContent="flex-start">
 				{client?.uin ? (
 					<Text dimColor color="green">
 						User: {client?.nickname} ({client?.uin})
