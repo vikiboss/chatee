@@ -29,7 +29,7 @@ export function Chat() {
 		<Box flexGrow={1} display="flex" flexDirection="column">
 			{!active.type && (
 				<Box>
-					<Text>Select 👉 </Text>
+					<Text>Chat 👉 </Text>
 					<SelectInput
 						onSelect={(item) => {
 							store.mutate.active.type = item.value;
@@ -75,7 +75,9 @@ export function Chat() {
 						</Box>
 					))}
 
-				{hasTarget && !histories.length && <Text dimColor>No message</Text>}
+				{hasTarget && !histories.length && (
+					<Text dimColor>Waiting for message...</Text>
+				)}
 			</Box>
 
 			{hasTarget && (

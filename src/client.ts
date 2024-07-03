@@ -1,5 +1,6 @@
+import path from "node:path";
 import { createClient } from "@icqqjs/icqq";
-import { store } from "./store";
+import { chateeLogDir, store } from "./store";
 
 import type { Client } from "@icqqjs/icqq";
 
@@ -10,9 +11,32 @@ export function login() {
 
 	store.mutate.page = "loading";
 
+	const logFilePath = path.join(
+		chateeLogDir,
+		`chatee-${new Date().toLocaleString()}.log`,
+	);
+
 	client = createClient({
 		platform,
 		sign_api_addr: "https://qsign.viki.moe/sign",
+		log_config: {
+			appenders: {
+				log_file: {
+					type: "file",
+					filename: logFilePath,
+					maxLogSize: 1024 * 1024 * 10,
+					compress: false,
+					backups: 3,
+					encoding: "utf-8",
+				},
+			},
+			categories: {
+				default: {
+					appenders: ["log_file"],
+					level: "all",
+				},
+			},
+		},
 	});
 
 	client.on("system.login.qrcode", () => {

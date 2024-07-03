@@ -25,6 +25,7 @@ export interface AppConfig {
 
 export const chateeDir = path.join(os.homedir(), ".config/chatee");
 export const chateeDataDir = path.join(chateeDir, "data");
+export const chateeLogDir = path.join(chateeDir, "logs");
 export const chateeConfig = path.join(chateeDir, "chatee.json");
 
 export const store = create({
