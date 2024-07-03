@@ -34,6 +34,10 @@ export function login() {
 	client.on("system.online", async () => {
 		store.mutate.isOnline = true;
 		store.mutate.page = "home";
+
+		await client?.reloadFriendList();
+		await client?.reloadGroupList();
+
 		store.mutate.groupList = [...(client?.getGroupList().values() ?? [])];
 		store.mutate.friendList = [...(client?.getFriendList().values() ?? [])];
 	});
