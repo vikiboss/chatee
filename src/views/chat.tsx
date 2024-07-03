@@ -4,12 +4,14 @@ import TextInput from "ink-text-input";
 import SelectInput from "ink-select-input";
 import { store } from "../store";
 import { client } from "../client";
+import { useAppConfig } from "../hooks/use-app-config";
 
 export function Chat() {
 	const id = useControlledComponent("");
 	const raw = useControlledComponent("");
 	const active = store.useSnapshot((s) => s.active);
 	const history = store.useSnapshot((s) => s.history);
+	const [, mutate] = useAppConfig();
 
 	const isGroup = active.type === "group";
 
@@ -56,6 +58,10 @@ export function Chat() {
 								store.mutate.active.name = isGroup
 									? client?.pickGroup(+id.value).name
 									: client?.pickFriend(+id.value).nickname;
+
+								if (mutate.recent.every((e) => e.id !== +id.value)) {
+									mutate.recent.push({ ...store.mutate.active });
+								}
 							}
 						}}
 					/>

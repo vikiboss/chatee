@@ -10,6 +10,7 @@ export namespace App {
 	export type Page =
 		| "list"
 		| "qrcode"
+		| "recent"
 		| "home"
 		| "about"
 		| "chat"
@@ -21,6 +22,7 @@ export interface AppConfig {
 	account?: number;
 	password?: string;
 	platform?: number;
+	recent: Active[];
 }
 
 export const chateeDir = path.join(os.homedir(), ".config/chatee");
@@ -28,16 +30,18 @@ export const chateeDataDir = path.join(chateeDir, "data");
 export const chateeLogDir = path.join(chateeDir, "logs");
 export const chateeConfig = path.join(chateeDir, "chatee.json");
 
+interface Active {
+	name?: string;
+	id?: number;
+	type?: "friend" | "group";
+}
+
 export const store = create({
 	config: readInitialConfig() as AppConfig,
 	page: "home" as App.Page,
 	isOnline: false,
 
-	active: {
-		name: undefined as string | undefined,
-		id: undefined as number | undefined,
-		type: undefined as "friend" | "group" | undefined,
-	},
+	active: {} as Active,
 
 	friendList: [] as FriendInfo[],
 	groupList: [] as GroupInfo[],
@@ -79,7 +83,9 @@ function readInitialConfig() {
 		return JSON.parse(fs.readFileSync(chateeConfig, "utf-8"));
 	}
 
-	fs.writeFileSync(chateeConfig, "{}", "utf-8");
+	fs.writeFileSync(chateeConfig, JSON.stringify({ recent: [] }), "utf-8");
 
-	return {};
+	return {
+		recent: [],
+	};
 }

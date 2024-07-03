@@ -8,12 +8,14 @@ import { store, type App } from "../store.js";
 import { useLoading } from "./use-loading.js";
 import { List } from "../views/list.js";
 import { QRcode } from "../views/qrcode.js";
+import { Recent } from '../views/recent.js';
 
 const map: Record<App.Page, React.ReactNode> = {
 	about: <About />,
 	chat: <Chat />,
 	qrcode: <QRcode />,
 	list: <List />,
+	recent: <Recent />,
 	home: <Home />,
 	settings: <Settings />,
 	loading: <Loading />,

@@ -24,7 +24,9 @@ export function Home() {
 	};
 
 	const pages = (
-		isOnline ? ["chat", "list", "exit"] : ["login", "settings", "exit"]
+		isOnline
+			? ["recent", "chat", "list", "exit"]
+			: ["login", "settings", "exit"]
 	).map((e) => ({
 		label: e,
 		value: e,
