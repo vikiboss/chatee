@@ -72,7 +72,13 @@ export function Chat() {
 				{hasTarget &&
 					histories.slice(-60).map((e) => (
 						<Box key={e.timestamp + e.name + e.content}>
-							<Text dimColor color={e.name === active.name ? "blue" : "gray"}>
+							<Text dimColor>
+								[{new Date(e.timestamp).toLocaleTimeString()}]
+							</Text>
+							<Text
+								dimColor
+								color={e.name === client?.nickname ? "green" : "gray"}
+							>
 								{e.name}
 							</Text>
 							<Box marginLeft={1}>
