@@ -85,7 +85,7 @@ export function login() {
 		store.mutate.history.groups[event.group_id] = [
 			...(store.mutate.history.groups[event.group_id] ?? []),
 			{
-				name: event.sender.nickname,
+				name: event.sender.card || event.sender.nickname,
 				groupName: event.group_name,
 				content: event.toString(),
 				timestamp: Date.now().toString(),
