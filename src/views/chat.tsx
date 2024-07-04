@@ -98,34 +98,44 @@ export function Chat() {
 					<TextInput
 						{...raw.props}
 						onSubmit={async () => {
-							if (!active.id || !raw.value) return;
+							const msg = raw.value;
+							if (!active.id || !msg) return;
 
-							raw.setValue(`${raw.value} (sending...)`);
+							raw.setValue("");
+
+							store.mutate.history.groups[active.id] ??= [];
+
+							const sendingTag = "(sending...)";
 
 							if (isGroup) {
-								const g = client?.pickGroup(active.id);
-								await g?.sendMsg(raw.value);
-
-								store.mutate.history.groups[active.id] ??= [];
-								store.mutate.history.groups[active.id].push({
+								const length = store.mutate.history.groups[active.id].push({
 									name: client?.nickname ?? "unknown",
 									timestamp: Date.now().toString(),
-									content: raw.value,
+									content: `${msg} ${sendingTag}`,
 									groupName: client?.pickGroup(active.id).name ?? "unknown",
 								});
-							} else {
-								const f = client?.pickFriend(active.id);
-								await f?.sendMsg(raw.value);
 
+								const g = client?.pickGroup(active.id);
+								await g?.sendMsg(msg);
+
+								const item = store.mutate.history.groups[active.id][length - 1];
+								item.content = item.content.replace(sendingTag, "").trim();
+							} else {
 								store.mutate.history.friends[active.id] ??= [];
-								store.mutate.history.friends[active.id].push({
+
+								const length = store.mutate.history.friends[active.id].push({
 									name: client?.nickname ?? "unknown",
 									timestamp: Date.now().toString(),
-									content: raw.value,
+									content: `${msg} ${sendingTag}`,
 								});
-							}
 
-							raw.reset();
+								const f = client?.pickFriend(active.id);
+								await f?.sendMsg(msg);
+
+								const item =
+									store.mutate.history.friends[active.id][length - 1];
+								item.content = item.content.replace(sendingTag, "").trim();
+							}
 						}}
 					/>
 				</Box>
