@@ -28,7 +28,7 @@ jobs:
           registry-url: 'https://registry.npmjs.org'
 
       - name: Add GitHub Orgnization Access Token
-        run: echo "//npm.pkg.github.com/:_authToken=${{ secrets.ICQQ_GITHUB_TOKEN }}" >> ~/.npmrc
+        run: echo "//npm.pkg.github.com/:_authToken=${{ secrets.ICQQ_GITHUB_TOKEN }}" >> .npmrc
         env:
           ICQQ_GITHUB_TOKEN: ${{ secrets.ICQQ_GITHUB_TOKEN }}
 
