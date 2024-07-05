@@ -1,6 +1,6 @@
 # Chatee
 
-Terminal chat, powered by `icqq`.
+A terminal chat app, powered by [`React`](https://react.dev/), [`ink`](https://github.com/vadimdemedes/ink), and [`icqq`](https://github.com/icqqjs/icqq) (private repo, join [icqqjs](https://github.com/icqqjs) org first to use it).
 
 ## Usage
 
