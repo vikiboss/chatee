@@ -7,7 +7,11 @@ import { useCircularList, useIntervalFn } from "@shined/react-use";
 export function StatusHeader() {
 	const isOnline = useIsOnline();
 	const active = store.useSnapshot((s) => s.active);
+
 	const [msg, actions] = useCircularList([
+		"`Tab` to go home",
+		"`Tab` to go home",
+		"`Tab` to go home",
 		"`Tab` to go home",
 		"`Ctrl C` to exit",
 	]);
