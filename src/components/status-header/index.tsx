@@ -14,10 +14,12 @@ export function StatusHeader() {
 
 	useIntervalFn(actions.next, 3000);
 
+	const isGroup = active.type === "group";
+
 	return (
 		<Box width="100%" gap={1}>
 			<Box gap={1}>
-				{client.uin ? (
+				{client.nickname ? (
 					<Text dimColor color="cyan">
 						{`${client.nickname} (${client.uin})`}
 					</Text>
@@ -34,8 +36,7 @@ export function StatusHeader() {
 				<>
 					<Box>
 						<Text dimColor color="yellow" wrap="truncate-middle">
-							[{active.type === "group" ? "G" : "F"}] {active.name} ({active.id}
-							)
+							[{isGroup ? "G" : "F"}] {active.name} ({active.id})
 						</Text>
 					</Box>
 					<Text dimColor color="gray">
