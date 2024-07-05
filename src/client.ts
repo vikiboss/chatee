@@ -6,15 +6,22 @@ const logFilename = `chatee-${new Date().toLocaleString()}.log`;
 const logFilePath = path.join(paths.chateeLogDir, logFilename);
 
 export let client: Client;
-export const defaultSignAPi = "https://qsign.viki.moe/sign";
+
+const { CHATEE_UIN, CHATEE_SIGN_API, CHATEE_PLATFORM } = process.env;
+
+export const envAccount = CHATEE_UIN ? +CHATEE_UIN : undefined;
+export const envSignAPI = CHATEE_SIGN_API;
+export const envPlatform = CHATEE_PLATFORM ? +CHATEE_PLATFORM : undefined;
+
+export const defaultSignAPI = "https://qsign.viki.moe/sign";
 
 export function setupClient() {
 	const { signApi, platform = Platform.iPad } = store.mutate.config || {};
 
 	client = createClient({
-		platform,
+		platform: envPlatform || platform,
 		data_dir: paths.chateeDataDir,
-		sign_api_addr: signApi || defaultSignAPi,
+		sign_api_addr: envSignAPI || signApi || defaultSignAPI,
 		log_config: {
 			appenders: {
 				log_file: {
@@ -100,7 +107,7 @@ export function setupClient() {
 
 export async function login() {
 	store.mutate.isLoggingIn = true;
-	await client.login(store.mutate.config.account);
+	await client.login(envAccount || store.mutate.config.account);
 	store.mutate.isLoggingIn = false;
 }
 

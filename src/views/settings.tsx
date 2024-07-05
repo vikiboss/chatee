@@ -4,7 +4,7 @@ import SelectInput from "ink-select-input";
 import TextInput from "ink-text-input";
 import { useAppConfig } from "../hooks/use-app-config";
 import { Platform } from "@icqqjs/icqq";
-import { defaultSignAPi } from "../client";
+import { defaultSignAPI } from "../client";
 
 export function Settings() {
 	const [config, mutate] = useAppConfig();
@@ -76,7 +76,7 @@ export function Settings() {
 						<Text>Platform: {config.platform}</Text>
 					</Box>
 					<Box>
-						<Text>Sign API: {config.signApi || defaultSignAPi}</Text>
+						<Text>Sign API: {config.signApi || defaultSignAPI}</Text>
 					</Box>
 					<Box>
 						<Text dimColor color="gray">
