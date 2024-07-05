@@ -7,7 +7,10 @@ settings:
 importers:
 
   .:
-    dependencies:
+    devDependencies:
+      '@biomejs/biome':
+        specifier: 1.8.3
+        version: 1.8.3
       '@icqqjs/icqq':
         specifier: ^1.2.4
         version: 1.2.4
@@ -17,25 +20,6 @@ importers:
       '@shined/reactive':
         specifier: ^0.1.3
         version: 0.1.3(react@18.3.1)
-      ink:
-        specifier: ^5.0.1
-        version: 5.0.1(@types/react@18.3.3)(react@18.3.1)
-      ink-select-input:
-        specifier: ^6.0.0
-        version: 6.0.0(ink@5.0.1(@types/react@18.3.3)(react@18.3.1))(react@18.3.1)
-      ink-text-input:
-        specifier: ^6.0.0
-        version: 6.0.0(ink@5.0.1(@types/react@18.3.3)(react@18.3.1))(react@18.3.1)
-      meow:
-        specifier: ^13.2.0
-        version: 13.2.0
-      react:
-        specifier: ^18.3.1
-        version: 18.3.1
-    devDependencies:
-      '@biomejs/biome':
-        specifier: 1.8.3
-        version: 1.8.3
       '@sindresorhus/tsconfig':
         specifier: ^6.0.0
         version: 6.0.0
@@ -45,6 +29,24 @@ importers:
       '@types/react':
         specifier: ^18.3.3
         version: 18.3.3
+      ink:
+        specifier: ^5.0.1
+        version: 5.0.1(@types/react@18.3.3)(react-devtools-core@4.28.5)(react@18.3.1)
+      ink-select-input:
+        specifier: ^6.0.0
+        version: 6.0.0(ink@5.0.1(@types/react@18.3.3)(react-devtools-core@4.28.5)(react@18.3.1))(react@18.3.1)
+      ink-text-input:
+        specifier: ^6.0.0
+        version: 6.0.0(ink@5.0.1(@types/react@18.3.3)(react-devtools-core@4.28.5)(react@18.3.1))(react@18.3.1)
+      meow:
+        specifier: ^13.2.0
+        version: 13.2.0
+      react:
+        specifier: ^18.3.1
+        version: 18.3.1
+      react-devtools-core:
+        specifier: ^4.28.5
+        version: 4.28.5
       tsup:
         specifier: ^8.1.0
         version: 8.1.0(typescript@5.5.3)
@@ -927,6 +929,9 @@ packages:
   queue-microtask@1.2.3:
     resolution: {integrity: sha512-NuaNSa6flKT5JaSYQzJok04JzTL1CA6aGhv5rfLW3PgqA+M2ChpZQnAC8h8i4ZFkBS8X5RqkDBHA7r4hej3K9A==}
 
+  react-devtools-core@4.28.5:
+    resolution: {integrity: sha512-cq/o30z9W2Wb4rzBefjv5fBalHU0rJGZCHAkf/RHSBWSSYwh8PlQTqqOJmgIIbBtpj27T6FIPXeomIjZtCNVqA==}
+
   react-reconciler@0.29.2:
     resolution: {integrity: sha512-zZQqIiYgDCTP/f1N/mAR10nJGrPD2ZR+jDSEsKWJHYC7Cm2wodlwbR3upZRdC3cjIjSlTLNVyO7Iu0Yy7t2AYg==}
     engines: {node: '>=0.10.0'}
@@ -980,6 +985,9 @@ packages:
   shebang-regex@3.0.0:
     resolution: {integrity: sha512-7++dFhtcx3353uBaq8DDR4NuxBetBzC7ZQOhmTQInHEd6bSrXdiEyzCvG07Z44UYdLShWUyXt5M/yhz8ekcb1A==}
     engines: {node: '>=8'}
+
+  shell-quote@1.8.1:
+    resolution: {integrity: sha512-6j1W9l1iAs/4xYBI1SYOVZyFcCis9b4KCLQ8fgAGG07QvzaRLVVRQvAy85yNmmZSjYjg4MWh4gNvlPujU/5LpA==}
 
   signal-exit@3.0.7:
     resolution: {integrity: sha512-wnD2ZE+l+SPC/uoS0vXeE9L1+0wuaMqKlfz9AMUo38JsyLSBWSFcHR1Rri62LZc12vLr1gb3jl7iwQhgwpAbGQ==}
@@ -1142,6 +1150,18 @@ packages:
   wrap-ansi@9.0.0:
     resolution: {integrity: sha512-G8ura3S+3Z2G+mkgNRq8dqaFZAuxfsxpBB8OCTGRTCtp+l/v9nbFNmCUP1BZMts3G1142MsZfn6eeUKrr4PD1Q==}
     engines: {node: '>=18'}
+
+  ws@7.5.10:
+    resolution: {integrity: sha512-+dbF1tHwZpXcbOJdVOkzLDxZP1ailvSxM6ZweXTegylPny803bFhA+vqBYw4s31NSAk4S2Qz+AKXK9a4wkdjcQ==}
+    engines: {node: '>=8.3.0'}
+    peerDependencies:
+      bufferutil: ^4.0.1
+      utf-8-validate: ^5.0.2
+    peerDependenciesMeta:
+      bufferutil:
+        optional: true
+      utf-8-validate:
+        optional: true
 
   ws@8.17.1:
     resolution: {integrity: sha512-6XQFvXTkbfUOZOKKILFG1PDK2NDQs4azKQl26T0YS5CxqWLgXajbPZ+h4gZekJyRqFU8pvnbAbbs/3TgRPy+GQ==}
@@ -1660,22 +1680,22 @@ snapshots:
 
   indent-string@5.0.0: {}
 
-  ink-select-input@6.0.0(ink@5.0.1(@types/react@18.3.3)(react@18.3.1))(react@18.3.1):
+  ink-select-input@6.0.0(ink@5.0.1(@types/react@18.3.3)(react-devtools-core@4.28.5)(react@18.3.1))(react@18.3.1):
     dependencies:
       figures: 6.1.0
-      ink: 5.0.1(@types/react@18.3.3)(react@18.3.1)
+      ink: 5.0.1(@types/react@18.3.3)(react-devtools-core@4.28.5)(react@18.3.1)
       lodash.isequal: 4.5.0
       react: 18.3.1
       to-rotated: 1.0.0
 
-  ink-text-input@6.0.0(ink@5.0.1(@types/react@18.3.3)(react@18.3.1))(react@18.3.1):
+  ink-text-input@6.0.0(ink@5.0.1(@types/react@18.3.3)(react-devtools-core@4.28.5)(react@18.3.1))(react@18.3.1):
     dependencies:
       chalk: 5.3.0
-      ink: 5.0.1(@types/react@18.3.3)(react@18.3.1)
+      ink: 5.0.1(@types/react@18.3.3)(react-devtools-core@4.28.5)(react@18.3.1)
       react: 18.3.1
       type-fest: 4.20.1
 
-  ink@5.0.1(@types/react@18.3.3)(react@18.3.1):
+  ink@5.0.1(@types/react@18.3.3)(react-devtools-core@4.28.5)(react@18.3.1):
     dependencies:
       '@alcalzone/ansi-tokenize': 0.1.3
       ansi-escapes: 7.0.0
@@ -1704,6 +1724,7 @@ snapshots:
       yoga-wasm-web: 0.3.3
     optionalDependencies:
       '@types/react': 18.3.3
+      react-devtools-core: 4.28.5
     transitivePeerDependencies:
       - bufferutil
       - utf-8-validate
@@ -1875,6 +1896,14 @@ snapshots:
 
   queue-microtask@1.2.3: {}
 
+  react-devtools-core@4.28.5:
+    dependencies:
+      shell-quote: 1.8.1
+      ws: 7.5.10
+    transitivePeerDependencies:
+      - bufferutil
+      - utf-8-validate
+
   react-reconciler@0.29.2(react@18.3.1):
     dependencies:
       loose-envify: 1.4.0
@@ -1939,6 +1968,8 @@ snapshots:
       shebang-regex: 3.0.0
 
   shebang-regex@3.0.0: {}
+
+  shell-quote@1.8.1: {}
 
   signal-exit@3.0.7: {}
 
@@ -2109,6 +2140,8 @@ snapshots:
       ansi-styles: 6.2.1
       string-width: 7.2.0
       strip-ansi: 7.1.0
+
+  ws@7.5.10: {}
 
   ws@8.17.1: {}
 
