@@ -1,6 +1,6 @@
 {
 	"name": "chatee",
-	"version": "0.0.0-alpha.6",
+	"version": "0.0.0",
 	"description": "a simple terminal chat app",
 	"packageManager": "pnpm@9.4.0",
 	"type": "module",
