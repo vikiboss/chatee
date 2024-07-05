@@ -24,9 +24,10 @@ npx chatee
 
 ## Usage
 
-- `tab` to return home.
-- `Ctrl C` to exit.
-- **Search** in list page is supported.
+- Press `⬆️` & `⬇️` to navigate.
+- Press `Tab` to return home.
+- Press `Ctrl C` to exit.
+- **Filter** feature at **Friends and Groups** page is supported.
 
 ## Env Description
 
