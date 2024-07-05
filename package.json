@@ -1,6 +1,6 @@
 {
 	"name": "chatee",
-	"version": "0.0.0-alpha.0",
+	"version": "0.0.0-alpha.1",
 	"description": "a simple terminal chat app",
 	"packageManager": "pnpm@9.4.0",
 	"type": "module",
@@ -15,7 +15,9 @@
 		"release": "bumpp",
 		"prepack": "clean-pkg-json"
 	},
-	"files": ["dist"],
+	"files": [
+		"dist"
+	],
 	"engines": {
 		"node": ">=18"
 	},
