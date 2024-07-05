@@ -1,11 +1,11 @@
 # Chatee
 
-Terminal chat.
+Terminal chat, powered by `icqq`.
 
 ## Usage
 
-1. Get Token from [icqqjs](https://github.com/icqqjs)
-2. Set Token in `.npmrc` file
+1. Get GitHub Organization Access Token from [icqqjs](https://github.com/icqqjs).
+2. Set Token in `.npmrc` file via following command.
 
 > Please replace `<ICQQ_GITHUB_TOKEN>` with your token.
 
@@ -17,12 +17,16 @@ echo "//npm.pkg.github.com/:_authToken=<ICQQ_GITHUB_TOKEN>" >> .npmrc
 
 ```tsx
 npx chatee
-// or 
+// or use specific env
 // CHATEE_SIGN_API=<SIGN_API> CHATEE_PLATFORM=<PLATFORM> CHATEE_UIN=<UIN> npx chatee
 ```
 
-## Env
+## Env Description
 
 - `CHATEE_SIGN_API`: Sign API for `icqq`
 - `CHATEE_PLATFORM`: Platform for `icqq`
 - `CHATEE_UIN`: Uin/ACcount for `icqq`
+
+## License
+
+MIT (c) 2024 Viki
