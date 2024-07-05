@@ -28,9 +28,9 @@ jobs:
           registry-url: 'https://registry.npmjs.org'
 
       - name: Add GitHub Orgnization Access Token
-        run: echo "//npm.pkg.github.com/:_authToken=${{ secrets.GITHUB_TOKEN }}" >> ~/.npmrc
+        run: echo "//npm.pkg.github.com/:_authToken=${{ secrets.ICQQ_GITHUB_TOKEN }}" >> ~/.npmrc
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          ICQQ_GITHUB_TOKEN: ${{ secrets.ICQQ_GITHUB_TOKEN }}
 
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
@@ -39,8 +39,9 @@ jobs:
         run: pnpm run build
 
       - name: Publish package
-        run: pnpm publish --provenance --no-git-checks --access public
+        run: pnpm publish --no-git-checks --access public
         env:
+          NODE_AUTH_TOKEN: ${{secrets.NPM_TOKEN}}
           NPM_CONFIG_PROVENANCE: true
 
       - name: Generate changelog
