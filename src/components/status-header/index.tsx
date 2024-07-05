@@ -1,7 +1,7 @@
-import { Box, Text, Spacer } from "ink";
+import { Box, Spacer, Text } from "ink";
+import { client } from "../../client";
 import { useIsOnline } from "../../hooks/use-is-online";
 import { store } from "../../store";
-import { client } from "../../client";
 
 export function StatusHeader() {
 	const isOnline = useIsOnline();
@@ -10,9 +10,9 @@ export function StatusHeader() {
 	return (
 		<Box width="100%">
 			<Box width={48} display="flex" justifyContent="flex-start">
-				{client?.uin ? (
+				{client.uin ? (
 					<Text dimColor color="green">
-						User: {client?.nickname} ({client?.uin})
+						User: {client.nickname} ({client.uin})
 					</Text>
 				) : (
 					<Text dimColor color="yellow">

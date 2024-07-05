@@ -7,7 +7,7 @@ export function QRcode() {
 
 	useInput((input, key) => {
 		if (key.return) {
-			client?.login();
+			client.login();
 		}
 	});
 

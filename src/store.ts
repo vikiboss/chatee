@@ -2,9 +2,9 @@ import fs from "node:fs";
 import os from "node:os";
 import path from "node:path";
 import { create } from "@shined/reactive";
-import { subscribe } from "@shined/reactive/vanilla";
 
 import type { FriendInfo, GroupInfo } from "@icqqjs/icqq";
+import { subscribe } from "@shined/reactive/vanilla";
 
 export namespace App {
 	export type Page =
@@ -26,9 +26,12 @@ export interface AppConfig {
 }
 
 export const chateeDir = path.join(os.homedir(), ".config/chatee");
-export const chateeDataDir = path.join(chateeDir, "data");
-export const chateeLogDir = path.join(chateeDir, "logs");
-export const chateeConfig = path.join(chateeDir, "chatee.json");
+
+export const paths = {
+	chateeDataDir: path.join(chateeDir, "data"),
+	chateeLogDir: path.join(chateeDir, "logs"),
+	chateeConfig: path.join(chateeDir, "chatee.json"),
+};
 
 interface Active {
 	name?: string;
@@ -37,7 +40,10 @@ interface Active {
 }
 
 export const store = create({
-	config: readInitialConfig() as AppConfig,
+	config: {
+		recent: [],
+	} as AppConfig,
+
 	page: "home" as App.Page,
 	isOnline: false,
 
@@ -50,6 +56,7 @@ export const store = create({
 		friends: {} as Record<
 			number,
 			{
+				id: string;
 				name: string;
 				timestamp: string;
 				content: string;
@@ -58,6 +65,7 @@ export const store = create({
 		groups: {} as Record<
 			number,
 			{
+				id: string;
 				name: string;
 				groupName: string;
 				timestamp: string;
@@ -67,25 +75,31 @@ export const store = create({
 	},
 });
 
-subscribe(store.mutate, (changes) => {
-	if (changes.props[0] === "config") {
+export function readInitialConfig() {
+	if (!fs.existsSync(chateeDir)) {
+		fs.mkdirSync(chateeDir, { recursive: true });
+	}
+
+	if (fs.existsSync(paths.chateeConfig)) {
+		store.mutate.config = JSON.parse(
+			fs.readFileSync(paths.chateeConfig, "utf-8"),
+		);
+	} else {
 		fs.writeFileSync(
-			chateeConfig,
-			JSON.stringify(store.mutate.config, null, 2),
+			paths.chateeConfig,
+			JSON.stringify({ recent: [] }),
+			"utf-8",
 		);
 	}
-});
+}
 
-function readInitialConfig() {
-	if (!fs.existsSync(chateeDir)) fs.mkdirSync(chateeDir, { recursive: true });
-
-	if (fs.existsSync(chateeConfig)) {
-		return JSON.parse(fs.readFileSync(chateeConfig, "utf-8"));
-	}
-
-	fs.writeFileSync(chateeConfig, JSON.stringify({ recent: [] }), "utf-8");
-
-	return {
-		recent: [],
-	};
+export function subscribeConfigChange() {
+	return subscribe(store.mutate, (changes) => {
+		if (changes.props[0] === "config") {
+			fs.writeFileSync(
+				paths.chateeConfig,
+				JSON.stringify(store.mutate.config, null, 2),
+			);
+		}
+	});
 }

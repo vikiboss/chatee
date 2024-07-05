@@ -1,7 +1,7 @@
 import { Box, Text } from "ink";
-import { store } from "../store";
 import SelectInput from "ink-select-input";
 import { useAppConfig } from "../hooks/use-app-config";
+import { store } from "../store";
 
 export function Recent() {
 	const [{ recent = [] }] = useAppConfig();

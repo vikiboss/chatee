@@ -1,7 +1,7 @@
 import fs from "node:fs";
 import { useMount, useUnmount } from "@shined/react-use";
+import { paths } from "../store.js";
 import { useAppConfig } from "./use-app-config.js";
-import { chateeDataDir } from "../store.js";
 
 export function useLifecycle(reset = false) {
 	const [_, mutate] = useAppConfig();
@@ -14,7 +14,7 @@ export function useLifecycle(reset = false) {
 				platform: undefined,
 			});
 
-			fs.rmdirSync(chateeDataDir, { recursive: true });
+			fs.rmdirSync(paths.chateeDataDir, { recursive: true });
 		}
 	});
 

@@ -1,9 +1,9 @@
+import { useCircularList, useSafeState } from "@shined/react-use";
 import { Box, Text } from "ink";
+import SelectInput from "ink-select-input";
 import TextInput from "ink-text-input";
 import { useAppConfig } from "../hooks/use-app-config";
 import { md5 } from "../utils/md5";
-import { useCircularList, useSafeState } from "@shined/react-use";
-import SelectInput from "ink-select-input";
 
 export function Settings() {
 	const [field, actions] = useCircularList([

@@ -2,9 +2,9 @@ import { useInput } from "ink";
 import { usePage } from "./use-page.js";
 
 export function useShortcuts() {
-	const [_, setPage, pageName] = usePage();
+	const [_, setPage] = usePage();
 
-	useInput((input, key) => {
+	useInput((_input, key) => {
 		if (key.tab) {
 			setPage("home");
 		}

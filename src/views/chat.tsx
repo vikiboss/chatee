@@ -1,10 +1,11 @@
 import { useControlledComponent, useUnmount } from "@shined/react-use";
 import { Box, Text } from "ink";
-import TextInput from "ink-text-input";
 import SelectInput from "ink-select-input";
-import { store } from "../store";
+import TextInput from "ink-text-input";
 import { client } from "../client";
 import { useAppConfig } from "../hooks/use-app-config";
+import { store } from "../store";
+import { md5 } from "../utils/md5";
 
 export function Chat() {
 	const id = useControlledComponent("");
@@ -56,8 +57,8 @@ export function Chat() {
 								store.mutate.active.id = +id.value;
 
 								store.mutate.active.name = isGroup
-									? client?.pickGroup(+id.value).name
-									: client?.pickFriend(+id.value).nickname;
+									? client.pickGroup(+id.value).name
+									: client.pickFriend(+id.value).nickname;
 
 								if (mutate.recent.every((e) => e.id !== +id.value)) {
 									mutate.recent.push({ ...store.mutate.active });
@@ -74,7 +75,7 @@ export function Chat() {
 						<Box key={e.timestamp + e.name + e.content}>
 							<Text
 								dimColor
-								color={e.name === client?.nickname ? "gray" : "green"}
+								color={e.name === client.nickname ? "gray" : "green"}
 							>
 								[{new Date(+e.timestamp).toLocaleTimeString()}-{e.name}]
 							</Text>
@@ -106,35 +107,47 @@ export function Chat() {
 							store.mutate.history.groups[active.id] ??= [];
 
 							const sendingTag = "(sending...)";
+							const msgId = md5(`${msg}${Date.now()}`);
 
 							if (isGroup) {
-								const length = store.mutate.history.groups[active.id].push({
-									name: client?.nickname ?? "unknown",
+								store.mutate.history.groups[active.id].push({
+									id: msgId,
+									name: client.nickname ?? "unknown",
 									timestamp: Date.now().toString(),
 									content: `${msg} ${sendingTag}`,
-									groupName: client?.pickGroup(active.id).name ?? "unknown",
+									groupName: client.pickGroup(active.id).name ?? "unknown",
 								});
 
-								const g = client?.pickGroup(active.id);
+								const g = client.pickGroup(active.id);
 								await g?.sendMsg(msg);
 
-								const item = store.mutate.history.groups[active.id][length - 1];
-								item.content = item.content.replace(sendingTag, "").trim();
+								const item = store.mutate.history.groups[active.id].find(
+									(e) => e.id === msgId,
+								);
+
+								if (item) {
+									item.content = item.content.replace(sendingTag, "").trim();
+								}
 							} else {
 								store.mutate.history.friends[active.id] ??= [];
 
-								const length = store.mutate.history.friends[active.id].push({
-									name: client?.nickname ?? "unknown",
+								store.mutate.history.friends[active.id].push({
+									id: msgId,
+									name: client.nickname ?? "unknown",
 									timestamp: Date.now().toString(),
 									content: `${msg} ${sendingTag}`,
 								});
 
-								const f = client?.pickFriend(active.id);
+								const f = client.pickFriend(active.id);
 								await f?.sendMsg(msg);
 
-								const item =
-									store.mutate.history.friends[active.id][length - 1];
-								item.content = item.content.replace(sendingTag, "").trim();
+								const item = store.mutate.history.friends[active.id].find(
+									(e) => e.id === msgId,
+								);
+
+								if (item) {
+									item.content = item.content.replace(sendingTag, "").trim();
+								}
 							}
 						}}
 					/>

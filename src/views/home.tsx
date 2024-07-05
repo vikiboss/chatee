@@ -1,10 +1,10 @@
 import { Box, Text, useApp } from "ink";
 import SelectInput from "ink-select-input";
-import { usePage } from "../hooks/use-page";
 import { client, login } from "../client";
+import { usePage } from "../hooks/use-page";
 
-import type { App } from "../store";
 import { useIsOnline } from "../hooks/use-is-online";
+import type { App } from "../store";
 
 type SelectValue = App.Page | "exit" | "login" | "list";
 
@@ -37,7 +37,7 @@ export function Home() {
 			<Box marginY={1}>
 				{isOnline ? (
 					<Text dimColor color="green">
-						Welcome to Chatee, {client?.nickname ?? "unknown"}!
+						Welcome to Chatee, {client.nickname ?? "unknown"}!
 					</Text>
 				) : (
 					<Text dimColor color="yellow">

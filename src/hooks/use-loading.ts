@@ -1,5 +1,5 @@
-import { create } from "@shined/reactive";
 import { createSingleLoading } from "@shined/react-use";
+import { create } from "@shined/reactive";
 
 export const loading = createSingleLoading({ create });
 

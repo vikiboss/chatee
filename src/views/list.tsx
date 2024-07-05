@@ -1,34 +1,40 @@
+import { useMount, useSafeState } from "@shined/react-use";
 import { Box, Text } from "ink";
-import { store } from "../store";
-import { useSafeState } from "@shined/react-use";
 import TextInput from "ink-text-input";
 import { useMemo } from "react";
+import { refreshList } from "../client";
+import { store } from "../store";
 
 export function List() {
-	const [filter, setFilter] = useSafeState("");
+	const [filterText, setFilter] = useSafeState("");
 
 	const [friends, groups] = store.useSnapshot((s) => [
 		s.friendList,
 		s.groupList,
 	]);
 
+	useMount(refreshList);
+
 	const filtered = useMemo(() => {
 		return {
-			friends: friends.filter(
-				(e) =>
-					e.user_id.toString().includes(filter) || e.nickname.includes(filter),
-			),
-			groups: groups.filter(
-				(e) =>
-					e.group_id.toString().includes(filter) ||
-					e.group_name.includes(filter),
-			),
+			friends: friends.filter((e) => {
+				return (
+					e.user_id.toString().includes(filterText) ||
+					e.nickname.includes(filterText)
+				);
+			}),
+			groups: groups.filter((e) => {
+				return (
+					e.group_id.toString().includes(filterText) ||
+					e.group_name.includes(filterText)
+				);
+			}),
 		};
-	}, [filter, friends, groups]);
+	}, [filterText, friends, groups]);
 
 	return (
 		<Box display="flex" flexDirection="column">
-			<TextInput value={filter} onChange={setFilter} />
+			<TextInput value={filterText} onChange={setFilter} />
 			<Box display="flex" flexDirection="column">
 				<Text bold> === Friends === </Text>
 				{filtered.friends.map((e) => (

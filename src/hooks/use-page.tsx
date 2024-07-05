@@ -1,14 +1,14 @@
 import { useStableFn } from "@shined/react-use";
-import { Home } from "../views/home.js";
-import { Chat } from "../views/chat.js";
-import { Loading } from "../views/loading.js";
-import { Settings } from "../views/settings.js";
+import { type App, store } from "../store.js";
 import { About } from "../views/about.js";
-import { store, type App } from "../store.js";
-import { useLoading } from "./use-loading.js";
+import { Chat } from "../views/chat.js";
+import { Home } from "../views/home.js";
 import { List } from "../views/list.js";
+import { Loading } from "../views/loading.js";
 import { QRcode } from "../views/qrcode.js";
-import { Recent } from '../views/recent.js';
+import { Recent } from "../views/recent.js";
+import { Settings } from "../views/settings.js";
+import { useLoading } from "./use-loading.js";
 
 const map: Record<App.Page, React.ReactNode> = {
 	about: <About />,
