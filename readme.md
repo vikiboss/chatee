@@ -25,7 +25,7 @@ npx chatee
 
 - `CHATEE_SIGN_API`: Sign API for `icqq`
 - `CHATEE_PLATFORM`: Platform for `icqq`
-- `CHATEE_UIN`: Uin/ACcount for `icqq`
+- `CHATEE_UIN`: Account/uin for `icqq`
 
 ## License
 
