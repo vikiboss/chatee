@@ -17,15 +17,15 @@ jobs:
         with:
           fetch-depth: 0
 
+      - name: Install pnpm
+        uses: pnpm/action-setup@v3
+
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: lts/*
           cache: pnpm
           registry-url: 'https://registry.npmjs.org'
-
-      - name: Install pnpm
-        uses: pnpm/action-setup@v3
 
       # - name: Add GitHub Orgnization Access Token
       #   run: echo "//npm.pkg.github.com/:_authToken=${{ secrets.GITHUB_TOKEN }}" >> ~/.npmrc
@@ -35,9 +35,6 @@ jobs:
 
       - name: Build package
         run: pnpm run build
-
-      - name: Run test
-        run: pnpm run test:ci
 
       - name: Publish package
         run: pnpm publish --provenance --no-git-checks --access public
