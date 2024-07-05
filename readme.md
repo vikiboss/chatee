@@ -4,8 +4,8 @@ A terminal chat app, powered by [`React`](https://react.dev/), [`ink`](https://g
 
 ## Usage
 
-1. Get GitHub Organization Access Token from [icqqjs](https://github.com/icqqjs).
-2. Set Token in `.npmrc` file via following command.
+1. Get **GitHub Organization Access Token** from [icqqjs](https://github.com/icqqjs).
+2. Set token in `.npmrc` file via following command.
 
 > Please replace `<ICQQ_GITHUB_TOKEN>` with your token.
 
