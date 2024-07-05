@@ -1,98 +1,111 @@
 import path from "node:path";
-import { createClient } from "@icqqjs/icqq";
+import { createClient, Platform, type Client } from "@icqqjs/icqq";
 import { paths, store } from "./store";
 
-const logFilePath = path.join(
-	paths.chateeLogDir,
-	`chatee-${new Date().toLocaleString()}.log`,
-);
+const logFilename = `chatee-${new Date().toLocaleString()}.log`;
+const logFilePath = path.join(paths.chateeLogDir, logFilename);
 
-const { platform = 3 } = store.mutate.config || {};
+export let client: Client;
 
-export const client = createClient({
-	platform,
-	sign_api_addr: "https://qsign.viki.moe/sign",
-	log_config: {
-		appenders: {
-			log_file: {
-				type: "file",
-				filename: logFilePath,
-				maxLogSize: 1024 * 1024 * 10,
-				compress: false,
-				backups: 3,
-				encoding: "utf-8",
+export function setupClient() {
+	const { platform = Platform.iPad } = store.mutate.config || {};
+
+	client = createClient({
+		platform,
+		data_dir: paths.chateeDataDir,
+		sign_api_addr: "https://qsign.viki.moe/sign",
+		log_config: {
+			appenders: {
+				log_file: {
+					type: "file",
+					filename: logFilePath,
+					maxLogSize: 1024 * 1024 * 10,
+					compress: false,
+					backups: 3,
+					encoding: "utf-8",
+				},
+			},
+			categories: {
+				default: {
+					appenders: ["log_file"],
+					level: "all",
+				},
 			},
 		},
-		categories: {
-			default: {
-				appenders: ["log_file"],
-				level: "all",
-			},
-		},
-	},
-});
+	});
 
-client.on("system.login.qrcode", () => {
-	store.mutate.page = "qrcode";
-});
+	client.on("system.login.qrcode", () => {
+		store.mutate.page = "qrcode";
+	});
 
-client.on("system.login.error", () => {
-	console.log("login error");
-});
+	client.on("system.login.error", () => {
+		console.log("event: system.login.error");
+	});
 
-client.on("system.login.device", () => {
-	console.log("login device");
-});
+	client.on("system.login.device", () => {
+		console.log("event: system.login.device");
+	});
 
-client.on("system.login.slider", () => {
-	console.log("login slider");
-});
+	client.on("system.login.slider", ({ url }) => {
+		console.log("event: system.login.slider");
+		console.log(`Slider URL: ${url}`);
+	});
 
-client.on("system.online", async () => {
-	store.mutate.isOnline = true;
-	store.mutate.page = "home";
+	client.on("system.offline.network", () => {
+		console.log("event: system.offline.network");
+		store.mutate.isOnline = false;
+	});
 
-	await refreshList();
+	client.on("system.offline.kickoff", () => {
+		console.log("event: system.offline.kickoff");
+		store.mutate.isOnline = false;
+	});
 
-	store.mutate.groupList = [...(client.getGroupList().values() ?? [])];
-	store.mutate.friendList = [...(client.getFriendList().values() ?? [])];
-});
+	client.on("system.online", async () => {
+		store.mutate.isOnline = true;
+		store.mutate.page = "home";
 
-client.on("system.offline", () => {
-	store.mutate.isOnline = false;
-});
+		await refreshList();
+	});
 
-client.on("message.private.friend", (event) => {
-	store.mutate.history.friends[event.sender.user_id] = [
-		...(store.mutate.history.friends[event.sender.user_id] ?? []),
-		{
+	client.on("message.private.friend", (event) => {
+		const friends = store.mutate.history.friends;
+		// biome-ignore lint/suspicious/noAssignInExpressions: <explanation>
+		const item = (friends[event.sender.user_id] ??= []);
+
+		item.push({
 			name: event.sender.nickname,
 			id: event.message_id,
 			content: event.toString(),
 			timestamp: Date.now().toString(),
-		},
-	];
-});
+		});
+	});
 
-client.on("message.group.normal", (event) => {
-	store.mutate.history.groups[event.group_id] = [
-		...(store.mutate.history.groups[event.group_id] ?? []),
-		{
+	client.on("message.group.normal", (event) => {
+		const groups = store.mutate.history.groups;
+		// biome-ignore lint/suspicious/noAssignInExpressions: <explanation>
+		const item = (groups[event.group_id] ??= []);
+
+		item.push({
 			id: event.message_id,
 			name: event.sender.card || event.sender.nickname,
 			groupName: event.group_name,
 			content: event.toString(),
 			timestamp: Date.now().toString(),
-		},
-	];
-});
+		});
+	});
+}
 
 export async function login() {
-	store.mutate.page = "loading";
+	store.mutate.isLoggingIn = true;
 	await client.login(store.mutate.config.account);
+	store.mutate.isLoggingIn = false;
 }
 
 export async function refreshList() {
 	await client.reloadFriendList();
 	await client.reloadGroupList();
+
+	store.mutate.groupList = Array.from(client.getGroupList().values());
+	store.mutate.friendList = Array.from(client.getFriendList().values());
 }

@@ -2,11 +2,12 @@
 
 import { render } from "ink";
 import meow from "meow";
-
 import { Chatee } from "./chatee.js";
+import { setupAppConfig } from "./store.js";
+import { setupClient } from "./client.js";
 
-process.on("uncaughtException", console.warn);
-process.on("unhandledRejection", console.warn);
+process.on("uncaughtException", console.error);
+process.on("unhandledRejection", console.error);
 
 const cli = meow(
 	`
@@ -18,12 +19,11 @@ const cli = meow(
 `,
 	{
 		importMeta: import.meta,
-		flags: {
-			reset: {
-				type: "boolean",
-			},
-		},
+		flags: { reset: { type: "boolean" } },
 	},
 );
 
-render(<Chatee reset={cli.flags.reset} />);
+setupAppConfig(cli.flags.reset);
+setupClient();
+
+render(<Chatee />);

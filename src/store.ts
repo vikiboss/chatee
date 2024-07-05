@@ -2,9 +2,9 @@ import fs from "node:fs";
 import os from "node:os";
 import path from "node:path";
 import { create } from "@shined/reactive";
+import { subscribe } from "@shined/reactive/vanilla";
 
 import type { FriendInfo, GroupInfo } from "@icqqjs/icqq";
-import { subscribe } from "@shined/reactive/vanilla";
 
 export namespace App {
 	export type Page =
@@ -14,8 +14,7 @@ export namespace App {
 		| "home"
 		| "about"
 		| "chat"
-		| "settings"
-		| "loading";
+		| "settings";
 }
 
 export interface AppConfig {
@@ -39,6 +38,13 @@ interface Active {
 	type?: "friend" | "group";
 }
 
+interface HistoryItem {
+	id: string;
+	name: string;
+	timestamp: string;
+	content: string;
+}
+
 export const store = create({
 	config: {
 		recent: [],
@@ -52,30 +58,25 @@ export const store = create({
 	friendList: [] as FriendInfo[],
 	groupList: [] as GroupInfo[],
 
+	isLoggingIn: false,
+
 	history: {
-		friends: {} as Record<
-			number,
-			{
-				id: string;
-				name: string;
-				timestamp: string;
-				content: string;
-			}[]
-		>,
-		groups: {} as Record<
-			number,
-			{
-				id: string;
-				name: string;
-				groupName: string;
-				timestamp: string;
-				content: string;
-			}[]
-		>,
+		friends: {} as Record<number, HistoryItem[]>,
+		groups: {} as Record<number, (HistoryItem & { groupName: string })[]>,
 	},
 });
 
-export function readInitialConfig() {
+export function setupAppConfig(reset = false) {
+	if (reset) {
+		Object.assign(store.mutate.config, {
+			account: undefined,
+			password: undefined,
+			platform: undefined,
+		});
+
+		fs.rmdirSync(paths.chateeDataDir, { recursive: true });
+	}
+
 	if (!fs.existsSync(chateeDir)) {
 		fs.mkdirSync(chateeDir, { recursive: true });
 	}
@@ -91,10 +92,8 @@ export function readInitialConfig() {
 			"utf-8",
 		);
 	}
-}
 
-export function subscribeConfigChange() {
-	return subscribe(store.mutate, (changes) => {
+	const unsubscribe = subscribe(store.mutate, (changes) => {
 		if (changes.props[0] === "config") {
 			fs.writeFileSync(
 				paths.chateeConfig,
@@ -102,4 +101,6 @@ export function subscribeConfigChange() {
 			);
 		}
 	});
+
+	return unsubscribe;
 }

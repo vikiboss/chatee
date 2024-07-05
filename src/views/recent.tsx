@@ -8,7 +8,6 @@ export function Recent() {
 
 	return (
 		<Box display="flex" flexDirection="column">
-			<Text>Recent:</Text>
 			<SelectInput
 				items={recent.map((e) => ({
 					label: `[${e.type === "friend" ? "F" : "G"}] ${e.name || e.id}`,

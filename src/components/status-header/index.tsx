@@ -6,17 +6,22 @@ import { store } from "../../store";
 export function StatusHeader() {
 	const isOnline = useIsOnline();
 	const active = store.useSnapshot((s) => s.active);
+	const isLoggingIn = store.useSnapshot((s) => s.isLoggingIn);
 
 	return (
 		<Box width="100%">
 			<Box width={48} display="flex" justifyContent="flex-start">
-				{client.uin ? (
+				{isLoggingIn ? (
+					<Text dimColor color="gray">
+						logging in...
+					</Text>
+				) : client.uin ? (
 					<Text dimColor color="green">
-						User: {client.nickname} ({client.uin})
+						{client.nickname} ({client.uin})
 					</Text>
 				) : (
 					<Text dimColor color="yellow">
-						No Account
+						Please Login.
 					</Text>
 				)}
 			</Box>
