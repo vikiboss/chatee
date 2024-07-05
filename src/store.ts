@@ -21,6 +21,7 @@ export interface AppConfig {
 	account?: number;
 	password?: string;
 	platform?: number;
+	signApi?: string;
 	recent: Active[];
 }
 

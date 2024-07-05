@@ -29,12 +29,16 @@ export function Home() {
 			: [
 					...(isOnline
 						? [
-								{ label: "Recent", value: "recent" },
+								{ label: "Recent Sessions", value: "recent" },
 								{ label: "Start Chat", value: "chat" },
+								{ label: "Friends and Groups", value: "list" },
+								{ label: "Settings", value: "settings" },
 							]
-						: [{ label: "Login", value: "login" }]),
-					{ label: "Settings", value: "settings" },
-					{ label: "Exit", value: "exit" },
+						: [
+								{ label: "Login", value: "login" },
+								{ label: "Settings", value: "settings" },
+								{ label: "Exit Chatee", value: "exit" },
+							]),
 				]
 	) as { label: string; value: SelectValue }[];
 

@@ -10,5 +10,5 @@ export default defineConfig({
 	dts: false,
 	clean: true,
 	minify: true,
-	noExternal: ["@shined/react-use"],
+	noExternal: ["@shined/react-use", "meow"],
 });

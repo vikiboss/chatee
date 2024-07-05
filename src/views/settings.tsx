@@ -1,20 +1,19 @@
-import { useCircularList, useSafeState } from "@shined/react-use";
+import { useCircularList } from "@shined/react-use";
 import { Box, Text } from "ink";
 import SelectInput from "ink-select-input";
 import TextInput from "ink-text-input";
 import { useAppConfig } from "../hooks/use-app-config";
-import { md5 } from "../utils/md5";
+import { Platform } from "@icqqjs/icqq";
+import { defaultSignAPi } from "../client";
 
 export function Settings() {
+	const [config, mutate] = useAppConfig();
 	const [field, actions] = useCircularList([
 		"user",
-		// "pwd",
-		"protocol",
+		"platform",
+		"sign",
 		"summary",
-	] as const);
-
-	const [config, mutate] = useAppConfig();
-	const [pass, setPass] = useSafeState("");
+	]);
 
 	return (
 		<>
@@ -34,33 +33,18 @@ export function Settings() {
 					/>
 				</Box>
 			)}
-			{/* {field === "pwd" && (
-				<Box>
-					<Text>Password: </Text>
-					<TextInput
-						value={pass}
-						onSubmit={() => {
-							if (pass) {
-								mutate.password = md5(pass);
-							}
-							actions.next();
-						}}
-						onChange={setPass}
-					/>
-				</Box>
-			)} */}
-			{field === "protocol" && (
+			{field === "platform" && (
 				<Box>
 					<Text>Platform: </Text>
 					<SelectInput
 						items={[
 							// { label: "Linux", value: 0 },
-							{ label: "aPhone", value: 1 },
-							{ label: "aPad", value: 2 },
-							{ label: "Watch", value: 3 },
-							{ label: "macOS", value: 4 },
-							{ label: "iPad", value: 5 },
-							{ label: "Tim", value: 6 },
+							{ label: "aPhone", value: Platform.Android },
+							{ label: "aPad", value: Platform.aPad },
+							{ label: "Watch", value: Platform.Watch },
+							{ label: "macOS", value: Platform.iMac },
+							{ label: "iPad", value: Platform.iPad },
+							{ label: "Tim", value: Platform.Tim },
 						]}
 						onSelect={(item) => {
 							mutate.platform = item.value;
@@ -70,20 +54,30 @@ export function Settings() {
 				</Box>
 			)}
 
+			{field === "sign" && (
+				<Box>
+					<Text>Sign API: </Text>
+					<TextInput
+						value={(config.signApi ?? "").toString()}
+						onSubmit={() => actions.next()}
+						onChange={(value) => {
+							if (value) mutate.signApi = value;
+						}}
+					/>
+				</Box>
+			)}
+
 			{field === "summary" && (
-				<Box display="flex" flexDirection="column">
+				<Box display="flex" flexDirection="column" gap={1}>
 					<Box>
 						<Text>Account: {config.account}</Text>
 					</Box>
 					<Box>
-						<Text wrap="truncate-end">
-							Password: {pass || `[md5]${config.password}`}
-						</Text>
-					</Box>
-					<Box>
 						<Text>Platform: {config.platform}</Text>
 					</Box>
-
+					<Box>
+						<Text>Sign API: {config.signApi || defaultSignAPi}</Text>
+					</Box>
 					<Box>
 						<Text dimColor color="gray">
 							Press `Tab` to return.

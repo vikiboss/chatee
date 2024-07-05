@@ -6,14 +6,15 @@ const logFilename = `chatee-${new Date().toLocaleString()}.log`;
 const logFilePath = path.join(paths.chateeLogDir, logFilename);
 
 export let client: Client;
+export const defaultSignAPi = "https://qsign.viki.moe/sign";
 
 export function setupClient() {
-	const { platform = Platform.iPad } = store.mutate.config || {};
+	const { signApi, platform = Platform.iPad } = store.mutate.config || {};
 
 	client = createClient({
 		platform,
 		data_dir: paths.chateeDataDir,
-		sign_api_addr: "https://qsign.viki.moe/sign",
+		sign_api_addr: signApi || defaultSignAPi,
 		log_config: {
 			appenders: {
 				log_file: {
@@ -62,6 +63,7 @@ export function setupClient() {
 	});
 
 	client.on("system.online", async () => {
+		store.mutate.config.account = client.uin;
 		store.mutate.isOnline = true;
 		store.mutate.page = "home";
 
@@ -70,7 +72,7 @@ export function setupClient() {
 
 	client.on("message.private.friend", (event) => {
 		const friends = store.mutate.history.friends;
-		// biome-ignore lint/suspicious/noAssignInExpressions: <explanation>
+		// biome-ignore lint/suspicious/noAssignInExpressions: no warning
 		const item = (friends[event.sender.user_id] ??= []);
 
 		item.push({
@@ -83,7 +85,7 @@ export function setupClient() {
 
 	client.on("message.group.normal", (event) => {
 		const groups = store.mutate.history.groups;
-		// biome-ignore lint/suspicious/noAssignInExpressions: <explanation>
+		// biome-ignore lint/suspicious/noAssignInExpressions: no warning
 		const item = (groups[event.group_id] ??= []);
 
 		item.push({
