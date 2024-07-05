@@ -27,8 +27,10 @@ jobs:
           cache: pnpm
           registry-url: 'https://registry.npmjs.org'
 
-      # - name: Add GitHub Orgnization Access Token
-      #   run: echo "//npm.pkg.github.com/:_authToken=${{ secrets.GITHUB_TOKEN }}" >> ~/.npmrc
+      - name: Add GitHub Orgnization Access Token
+        run: echo "//npm.pkg.github.com/:_authToken=${{ secrets.GITHUB_TOKEN }}" >> ~/.npmrc
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
