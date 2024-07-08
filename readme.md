@@ -38,7 +38,7 @@ npx chatee
 ## Data & Config
 
 - Chatee Dir: `<os.homedir>/.config/chatee`
-- Chatee Config: `<os.homedir>/.config/chatee/chatee.json`,`
+- Chatee Config: `<os.homedir>/.config/chatee/chatee.json`
 
 ## License
 
