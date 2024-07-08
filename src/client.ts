@@ -15,6 +15,21 @@ export const envPlatform = CHATEE_PLATFORM ? +CHATEE_PLATFORM : undefined;
 
 export const defaultSignAPI = "https://qsign.viki.moe/sign";
 
+const buildImage = (hash: string) =>
+	`[https://gchat.qpic.cn/gchatpic_new/0/0-0-${hash}/0?term=2&is_origin=1]`;
+
+const imageReg = /{image:([0-9A-F]{32})}/i;
+
+const replaceImage = (text: string): string => {
+	const match = text.match(imageReg);
+
+	if (match) {
+		return replaceImage(match[1] ? buildImage(match[1]) : text);
+	}
+
+	return text;
+};
+
 export function setupClient() {
 	const { signApi, platform = Platform.iPad } = store.mutate.config || {};
 
@@ -85,7 +100,7 @@ export function setupClient() {
 		item.push({
 			name: event.sender.nickname,
 			id: event.message_id,
-			content: event.toString(),
+			content: replaceImage(event.toString()),
 			timestamp: Date.now().toString(),
 		});
 	});
@@ -99,7 +114,7 @@ export function setupClient() {
 			id: event.message_id,
 			name: event.sender.card || event.sender.nickname,
 			groupName: event.group_name,
-			content: event.toString(),
+			content: replaceImage(event.toString()),
 			timestamp: Date.now().toString(),
 		});
 	});

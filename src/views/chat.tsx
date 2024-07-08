@@ -6,6 +6,9 @@ import { client } from "../client";
 import { useAppConfig } from "../hooks/use-app-config";
 import { store } from "../store";
 import { md5 } from "../utils/md5";
+import { segment } from "@icqqjs/icqq";
+
+const REGEXP_IMAGE = /^img\s+(.*)$/;
 
 export function Chat() {
 	const id = useControlledComponent("");
@@ -119,7 +122,14 @@ export function Chat() {
 								});
 
 								const g = client.pickGroup(active.id);
-								await g?.sendMsg(msg);
+								if (msg.trim().match(REGEXP_IMAGE)) {
+									const url = REGEXP_IMAGE.exec(msg)?.[1] ?? "";
+									if (url) {
+										await g?.sendMsg(segment.image(url));
+									}
+								} else {
+									await g?.sendMsg(msg);
+								}
 
 								const item = store.mutate.history.groups[active.id].find(
 									(e) => e.id === msgId,
@@ -139,7 +149,15 @@ export function Chat() {
 								});
 
 								const f = client.pickFriend(active.id);
-								await f?.sendMsg(msg);
+
+								if (msg.trim().match(REGEXP_IMAGE)) {
+									const url = REGEXP_IMAGE.exec(msg)?.[1] ?? "";
+									if (url) {
+										await f?.sendMsg(segment.image(url));
+									}
+								} else {
+									await f?.sendMsg(msg);
+								}
 
 								const item = store.mutate.history.friends[active.id].find(
 									(e) => e.id === msgId,
