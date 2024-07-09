@@ -10,8 +10,8 @@ A terminal chat app, powered by [`React`](https://react.dev/), [`ink`](https://g
 > Please replace `<ICQQ_GITHUB_TOKEN>` with your token.
 
 ```shell
-echo "@icqqjs:registry=https://npm.pkg.github.com" >> .npmrc
-echo "//npm.pkg.github.com/:_authToken=<ICQQ_GITHUB_TOKEN>" >> .npmrc
+echo "@icqqjs:registry=https://npm.pkg.github.com" >> ~/.npmrc
+echo "//npm.pkg.github.com/:_authToken=<ICQQ_GITHUB_TOKEN>" >> ~/.npmrc
 ```
 
 3. Run Chatee
