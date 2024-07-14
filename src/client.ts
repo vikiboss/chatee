@@ -87,9 +87,9 @@ export function setupClient() {
 		item.push({
 			name: event.sender.nickname,
 			id: event.message_id,
-			content: JSON.stringify(
-				event.message.map((e) => (e.type === "text" ? e.text : e)),
-			),
+			content: event.message
+				.map((e) => (e.type === "text" ? e.text : JSON.stringify(e)))
+				.join(" "),
 			timestamp: Date.now().toString(),
 		});
 	});
@@ -103,9 +103,9 @@ export function setupClient() {
 			id: event.message_id,
 			name: event.sender.card || event.sender.nickname,
 			groupName: event.group_name,
-			content: JSON.stringify(
-				event.message.map((e) => (e.type === "text" ? e.text : e)),
-			),
+			content: event.message
+				.map((e) => (e.type === "text" ? e.text : JSON.stringify(e)))
+				.join(" "),
 			timestamp: Date.now().toString(),
 		});
 	});

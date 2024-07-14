@@ -9,6 +9,7 @@ import { md5 } from "../utils/md5";
 import { segment } from "@icqqjs/icqq";
 
 const REGEXP_IMAGE = /^img\s+(.*)$/;
+const REGEXP_FACE = /^face\s+(\d+)$/;
 
 export function Chat() {
 	const id = useControlledComponent("");
@@ -75,17 +76,18 @@ export function Chat() {
 			<Box display="flex" flexDirection="column" marginY={1}>
 				{hasTarget &&
 					histories.slice(-60).map((e) => (
-						<Box key={e.timestamp + e.name + e.content}>
+						<Box
+							display="flex"
+							flexDirection="column"
+							key={e.timestamp + e.name + e.content}
+						>
 							<Text
 								dimColor
 								color={e.name === client.nickname ? "gray" : "green"}
 							>
-								[{new Date(+e.timestamp).toLocaleTimeString()}-{e.name}]
+								[{e.name}] {new Date(+e.timestamp).toLocaleTimeString()}
 							</Text>
-
-							<Box marginLeft={1}>
-								<Text dimColor>{e.content}</Text>
-							</Box>
+							<Text dimColor>{e.content}</Text>
 						</Box>
 					))}
 
