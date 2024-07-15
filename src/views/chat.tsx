@@ -14,23 +14,23 @@ const REGEXP_FACE = /^face\s+(\d+)$/;
 export function Chat() {
 	const id = useControlledComponent("");
 	const raw = useControlledComponent("");
-	const active = store.useSnapshot((s) => s.active);
-	const history = store.useSnapshot((s) => s.history);
+
 	const [, mutate] = useAppConfig();
 
-	const isGroup = active.type === "group";
+	const [active, isGroup, hasTarget] = store.useSnapshot((s) => [
+		s.active,
+		s.active.type === "group",
+		s.active.type && s.active.id,
+	]);
 
-	useUnmount(() => {
-		store.mutate.active.name = undefined;
-		store.mutate.active.type = undefined;
-		store.mutate.active.id = undefined;
+	const histories = store.useSnapshot((s) => {
+		const attr = s.active.type === "group" ? "groups" : "friends";
+		return active.id ? s.history[attr][active.id] ?? [] : [];
 	});
 
-	const histories = active.id
-		? history[isGroup ? "groups" : "friends"][active.id] ?? []
-		: [];
-
-	const hasTarget = active.type && active.id;
+	useUnmount(() => {
+		store.mutate.active = {};
+	});
 
 	return (
 		<Box flexGrow={1} display="flex" flexDirection="column">
@@ -75,12 +75,8 @@ export function Chat() {
 
 			<Box display="flex" flexDirection="column" marginY={1}>
 				{hasTarget &&
-					histories.slice(-60).map((e) => (
-						<Box
-							display="flex"
-							flexDirection="column"
-							key={e.timestamp + e.name + e.content}
-						>
+					histories.slice(-100).map((e) => (
+						<Box display="flex" flexDirection="column" key={e.id}>
 							<Text
 								dimColor
 								color={e.name === client.nickname ? "gray" : "green"}
@@ -92,7 +88,7 @@ export function Chat() {
 					))}
 
 				{hasTarget && !histories.length && (
-					<Text dimColor>Waiting for message...</Text>
+					<Text dimColor>Waiting for new message...</Text>
 				)}
 			</Box>
 
