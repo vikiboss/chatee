@@ -79,7 +79,7 @@ export function Chat() {
 						<Box display="flex" flexDirection="column" key={e.id}>
 							<Text
 								dimColor
-								color={e.name === client.nickname ? "gray" : "green"}
+								color={e.name === client.nickname ? "yellow" : "green"}
 							>
 								[{e.name}] {new Date(+e.timestamp).toLocaleTimeString()}
 							</Text>
