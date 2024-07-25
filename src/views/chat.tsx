@@ -135,6 +135,7 @@ export function Chat() {
 
 								if (item) {
 									item.content = item.content.replace(sendingTag, "").trim();
+									item.timestamp = Date.now().toString();
 								}
 							} else {
 								store.mutate.history.friends[active.id] ??= [];
@@ -163,6 +164,7 @@ export function Chat() {
 
 								if (item) {
 									item.content = item.content.replace(sendingTag, "").trim();
+									item.timestamp = Date.now().toString();
 								}
 							}
 						}}
